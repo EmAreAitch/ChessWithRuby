@@ -2,7 +2,7 @@ require_relative 'cell'
 
 class Diagonal
 	def initialize(diagonal:)
-		raise ArgumentError, "Diagonal takes array of cell objects only" unless diagonal.is_a?(Array) and diagonal.all? { |e| e.is_a?(Cell) }
+		raise ArgumentError, "Diagonal takes array of cell objects only" unless diagonal.is_a?(Array) and diagonal.all?(Cell)
 		@diagonal = diagonal
 	end
 
