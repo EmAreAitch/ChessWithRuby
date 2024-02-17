@@ -3,13 +3,13 @@
 require_relative 'cell'
 
 class Diagonal
-  def initialize(left:, right:)
-    unless left.is_a?(Array) && right.is_a?(Array) && left.all?(Cell) && right.all?(Cell)
-      raise ArgumentError,
-            'Diagonal takes array of cell objects only'
-    end
+  def initialize(diagonal:)
+    raise ArgumentError, 'Diagonal takes array of cell objects only' unless diagonal.is_a?(Array) && diagonal.all?(Cell)
 
-    @left = left
-    @right = right
+    @diagonal = diagonal
+  end
+
+  def [](cell_index)
+    @diagonal[cell_index]
   end
 end
