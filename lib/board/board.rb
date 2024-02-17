@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'cell'
+require_relative 'square'
 require_relative 'row'
 require_relative 'column'
 require_relative 'diagonal'
@@ -9,7 +9,7 @@ class Board
 
   def initialize
     build_board
-    assign_cells
+    assign_squares
   end
 
   def build_board
@@ -21,28 +21,28 @@ class Board
     }
   end
 
-  def assign_cells
+  def assign_squares
     64.times do |i|
-      cell = build_cell(i)
-      cell.row.push cell
-      cell.column.push cell
-      cell.diagonal[:left].push cell
-      cell.diagonal[:right].push cell
+      square = build_square(i)
+      square.row.push square
+      square.column.push square
+      square.diagonal[:left].push square
+      square.diagonal[:right].push square
     end
   end
 
-  def build_cell(index)
+  def build_square(index)
     color = %i[white black]
     color_index = (index / 8).even? ? index % 2 : (index + 1) % 2
     options = {
       piece: nil,
       color: color[color_index],
-      **get_cell_position(index)
+      **get_square_position(index)
     }
-    Cell.new(options: options)
+    Square.new(options: options)
   end
 
-  def get_cell_position(index)
+  def get_square_position(index)
     {
       row: get_row(index),
       column: get_column(index),

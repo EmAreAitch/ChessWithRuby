@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Cell
+class Square
   attr_reader :row, :column, :diagonal, :color
 
   WHITE_BACKGROUND = "\e[48;2;230;200;160m"

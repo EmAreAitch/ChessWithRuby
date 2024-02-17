@@ -1,23 +1,26 @@
 # frozen_string_literal: true
 
-require_relative 'cell'
+require_relative 'square'
 
 class Diagonal
   attr_reader :diagonal
 
   def initialize(diagonal:)
-    raise ArgumentError, 'Diagonal takes array of cell objects only' unless diagonal.is_a?(Array) && diagonal.all?(Cell)
+    unless diagonal.is_a?(Array) && diagonal.all?(Square)
+      raise ArgumentError,
+            'Diagonal takes array of square objects only'
+    end
 
     @diagonal = diagonal
   end
 
-  def [](cell_index)
-    @diagonal[cell_index]
+  def [](square_index)
+    @diagonal[square_index]
   end
 
-  def push(cell)
-    raise ArgumentError, 'Object must of Cell type' unless cell.is_a?(Cell)
+  def push(square)
+    raise ArgumentError, 'Object must of Square type' unless square.is_a?(Square)
 
-    @diagonal.push(cell)
+    @diagonal.push(square)
   end
 end
