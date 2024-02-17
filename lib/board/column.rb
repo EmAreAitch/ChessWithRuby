@@ -3,6 +3,8 @@
 require_relative 'cell'
 
 class Column
+  attr_reader :column
+
   def initialize(column:)
     raise ArgumentError, 'Column takes array of cell objects only' unless column.is_a?(Array) && column.all?(Cell)
 
@@ -11,5 +13,11 @@ class Column
 
   def [](cell_index)
     @column[cell_index]
+  end
+
+  def push(cell)
+    raise ArgumentError, 'Object must of Cell type' unless cell.is_a?(Cell)
+
+    @column.push(cell)
   end
 end
