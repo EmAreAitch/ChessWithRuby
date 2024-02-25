@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+# Represents individual squares in chess board
+# Responsible for tracking piece in that square of the chess board
 class Square
   attr_reader :row, :column, :diagonal, :color, :piece
 
+  VALID_DIAGONAL = %i[left right].freeze
   WHITE_BACKGROUND = "\e[48;2;230;200;160m"
   BLACK_BACKGROUND = "\e[48;2;181;136;99m"
   RESET_BACKGROUND = "\e[0m"
@@ -16,10 +19,39 @@ class Square
 
   def put_piece(piece)
     @piece = piece
+    @piece.assign_square(self)
   end
 
   def inspect
-    "#<#{self.class}:0x#{(object_id << 1).to_s(16)} @piece=#{@piece}, @color=#{@color}>"
+    "#<#{self.class}:0x#{(object_id << 1).to_s(16)} @piece=#{@piece.inspect}, @color=#{@color}>"
+  end
+
+  def piece?
+    !@piece.nil?
+  end
+
+  def empty?
+    !piece?
+  end
+
+  def piece_color?(color:)
+    @piece&.color.eql?(color)
+  end
+
+  def remove_piece
+    temp_piece = @piece
+    @piece = nil
+    temp_piece
+  end
+
+  def get_squares_in_column(direction:)
+    @column.get_squares(self, direction:)
+  end
+
+  def get_squares_in_diagonal(diagonal:, direction:)
+    raise ArgumentError, ":#{diagonal} Invalid Diagonal" unless VALID_DIAGONAL.include? diagonal
+
+    @diagonal[diagonal].get_squares(self, direction:)
   end
 
   def to_s

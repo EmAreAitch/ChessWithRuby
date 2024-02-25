@@ -76,6 +76,13 @@ class Board
     }
   end
 
+  def get_square_by_notation(notation)
+    notation = notation.upcase
+    column = notation[0].ord - 65
+    row = notation[1].to_i
+    @rows[-row][column]
+  end
+
   def to_s
     rows.map(&:to_s).join("\n")
   end

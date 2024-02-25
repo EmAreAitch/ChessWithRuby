@@ -2,6 +2,8 @@
 
 require_relative 'square'
 
+# Represents rows in chess board
+# Responsible for tracking pieces in that row of the chess board
 class Row
   attr_reader :row
 

@@ -7,12 +7,17 @@ require_relative 'bishop'
 require_relative 'knight'
 require_relative 'pawn'
 
+# Represents Pieces in Chess
+# Responsible for dealing with game logic for chess moves
 class PiecesController
+  attr_reader :captured
+
   def initialize(board:)
     @board = board
     @white_player = initialize_player(:white)
     @black_player = initialize_player(:black)
     place_starting_pieces
+    @captured = []
   end
 
   def initialize_player(player_color)
@@ -49,5 +54,16 @@ class PiecesController
     player_hash => {king:, queen:, rook:, bishop:, knight:}
     player_edge_row = [rook[0], knight[0], bishop[0], queen, king, bishop[1], knight[1], rook[1]]
     @board.rows[index].fill_row(player_edge_row)
+  end
+
+  def move_piece(start_square_notation, end_square_notation)
+    start_square = @board.get_square_by_notation(start_square_notation)
+    end_square = @board.get_square_by_notation(end_square_notation)
+    end_square_piece = end_square.piece
+    piece = start_square.piece
+    piece.move_to(end_square)
+    @captured << end_square_piece if end_square_piece
+  rescue RuntimeError => e
+    puts e.message
   end
 end
