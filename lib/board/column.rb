@@ -7,7 +7,7 @@ require_relative 'square'
 class Column
   attr_reader :column
 
-  VALID_DIRECTIONS = %i[above below].freeze
+  VALID_DIRECTIONS = %i[above below both].freeze
   def initialize(column:)
     raise ArgumentError, 'Column takes array of square objects only' unless column.is_a?(Array) && column.all?(Square)
 
@@ -24,8 +24,10 @@ class Column
     square_index = @column.index(square)
     if direction.eql?(:above)
       @column[...square_index].reverse
-    else
+    elsif direction.eql?(:below)
       @column[square_index + 1..]
+    else
+      [@column[...square_index].reverse, @column[square_index + 1..]]
     end
   end
 

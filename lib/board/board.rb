@@ -84,7 +84,9 @@ class Board
   end
 
   def to_s
-    rows.map(&:to_s).join("\n")
+    column_notation = "   #{[*'A'..'H'].join('   ')}"
+    board_string = rows.map.with_index { |row, index| "#{8 - index} #{row} #{8 - index}" }.join("\n")
+    "#{column_notation}\n#{board_string}\n#{column_notation}"
   end
 
   def inspect

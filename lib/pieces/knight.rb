@@ -6,8 +6,8 @@ require_relative 'piece_helper'
 # Responsible for dealing with game logic for knight
 class Knight
   include PieceHelper
-  def initialize(color:)
-    @color = color
-    @symbol = '♞'
+
+  def symbol
+    '♞'
   end
 end

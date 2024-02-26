@@ -7,7 +7,7 @@ require_relative 'square'
 class Diagonal
   attr_reader :diagonal
 
-  VALID_DIRECTIONS = %i[above below].freeze
+  VALID_DIRECTIONS = %i[above below both].freeze
   def initialize(diagonal:)
     unless diagonal.is_a?(Array) && diagonal.all?(Square)
       raise ArgumentError,
@@ -27,8 +27,10 @@ class Diagonal
     square_index = @diagonal.index(square)
     if direction.eql?(:above)
       @diagonal[...square_index].reverse
-    else
+    elsif direction.eql?(:below)
       @diagonal[square_index + 1..]
+    else
+      [@diagonal[...square_index].reverse, @diagonal[square_index + 1..]]
     end
   end
 

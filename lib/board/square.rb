@@ -18,6 +18,7 @@ class Square
   end
 
   def put_piece(piece)
+    piece.square&.remove_piece
     @piece = piece
     @piece.assign_square(self)
   end
@@ -46,6 +47,10 @@ class Square
 
   def get_squares_in_column(direction:)
     @column.get_squares(self, direction:)
+  end
+
+  def get_squares_in_row(direction:)
+    @row.get_squares(self, direction:)
   end
 
   def get_squares_in_diagonal(diagonal:, direction:)
