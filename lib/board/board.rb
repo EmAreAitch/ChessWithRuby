@@ -14,11 +14,11 @@ class Board
   end
 
   def build_board
-    @rows = Array.new(8) { Row.new(row: []) }
-    @columns = Array.new(8) { Column.new(column: []) }
+    @rows = Array.new(8) { Row.new(squares: []) }
+    @columns = Array.new(8) { Column.new(squares: []) }
     @diagonals = {
-      left: Array.new(15) { Diagonal.new(diagonal: []) },
-      right: Array.new(15) { Diagonal.new(diagonal: []) }
+      left: Array.new(15) { Diagonal.new(squares: []) },
+      right: Array.new(15) { Diagonal.new(squares: []) }
     }
   end
 
@@ -80,6 +80,8 @@ class Board
     notation = notation.upcase
     column = notation[0].ord - 65
     row = notation[1].to_i
+    return nil unless row.between?(1, 8) && column.between?(0, 7)
+
     @rows[-row][column]
   end
 

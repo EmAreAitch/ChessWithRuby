@@ -100,10 +100,39 @@ describe Board do # rubocop:disable Metrics/BlockLength
         wht_bg = Square::WHITE_BACKGROUND
         blk_bg = Square::BLACK_BACKGROUND
         rst_bg = Square::RESET_BACKGROUND
-        odd_row = "#{"#{wht_bg}    #{rst_bg + blk_bg}    #{rst_bg}" * 4}\n"
-        even_row = "#{"#{blk_bg}    #{rst_bg + wht_bg}    #{rst_bg}" * 4}\n"
-        expected_result = ((odd_row + even_row) * 4).chomp
+        column_notation = "   #{[*'A'..'H'].join('   ')}"
+        odd_row = ("#{wht_bg}    #{rst_bg + blk_bg}    #{rst_bg}" * 4).to_s
+        even_row = ("#{blk_bg}    #{rst_bg + wht_bg}    #{rst_bg}" * 4).to_s
+        rows = [*[odd_row, even_row] * 4].map.with_index { |row, index| "#{8 - index} #{row} #{8 - index}" }
+        expected_result =  "#{column_notation}\n#{rows.join("\n")}\n#{column_notation}"
         expect(board.to_s).to eq(expected_result)
+      end
+    end
+  end
+
+  describe '#get_square_by_notation' do
+    context 'when notation is e5' do
+      it 'returns the 5th square from 4th row' do
+        square = board.get_square_by_notation('e5')
+        expect(board.rows[3][4]).to eq(square)
+      end
+    end
+    context 'when notation is a1' do
+      it 'returns the first square from last row' do
+        square = board.get_square_by_notation('a1')
+        expect(board.rows[7][0]).to eq(square)
+      end
+    end
+    context 'when notation is h8' do
+      it 'returns the last square from first row' do
+        square = board.get_square_by_notation('h8')
+        expect(board.rows[0][7]).to eq(square)
+      end
+    end
+    context 'when notation is h9' do
+      it 'returns nil' do
+        square = board.get_square_by_notation('h9')
+        expect(square).to be nil
       end
     end
   end

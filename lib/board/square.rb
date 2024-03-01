@@ -18,6 +18,7 @@ class Square
   end
 
   def put_piece(piece)
+    @piece&.assign_square(nil)
     piece.square&.remove_piece
     @piece = piece
     @piece.assign_square(self)
@@ -40,21 +41,29 @@ class Square
   end
 
   def remove_piece
+    return nil unless piece?
+
+    @piece&.assign_square(nil)
     temp_piece = @piece
     @piece = nil
     temp_piece
   end
 
-  def get_squares_in_column(direction:)
+  def get_squares_in_column(direction:, offset: nil)
+    return @column.get_square_by_offset(self, offset, direction:) if offset
+
     @column.get_squares(self, direction:)
   end
 
-  def get_squares_in_row(direction:)
+  def get_squares_in_row(direction:, offset: nil)
+    return @row.get_square_by_offset(self, offset, direction:) if offset
+
     @row.get_squares(self, direction:)
   end
 
-  def get_squares_in_diagonal(diagonal:, direction:)
+  def get_squares_in_diagonal(diagonal:, direction:, offset: nil)
     raise ArgumentError, ":#{diagonal} Invalid Diagonal" unless VALID_DIAGONAL.include? diagonal
+    return @row.get_square_by_offset(self, offset, direction:) if offset
 
     @diagonal[diagonal].get_squares(self, direction:)
   end
