@@ -63,7 +63,7 @@ class Square
 
   def get_squares_in_diagonal(diagonal:, direction:, offset: nil)
     raise ArgumentError, ":#{diagonal} Invalid Diagonal" unless VALID_DIAGONAL.include? diagonal
-    return @row.get_square_by_offset(self, offset, direction:) if offset
+    return @diagonal[diagonal].get_square_by_offset(self, offset, direction:) if offset
 
     @diagonal[diagonal].get_squares(self, direction:)
   end
