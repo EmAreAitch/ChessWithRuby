@@ -41,10 +41,10 @@ class PiecesController
   def place_player_pawns(player)
     if player.eql?(:white)
       pawns = @white_player[:pawn]
-      @board.rows[-2].fill_row(pawns)
+      @board.rows[-2].fill(pawns)
     else
       pawns = @black_player[:pawn]
-      @board.rows[1].fill_row(pawns)
+      @board.rows[1].fill(pawns)
     end
   end
 
@@ -53,7 +53,7 @@ class PiecesController
     index = player.eql?(:white) ? -1 : 0
     player_hash => {king:, queen:, rook:, bishop:, knight:}
     player_edge_row = [rook[0], knight[0], bishop[0], queen, king, bishop[1], knight[1], rook[1]]
-    @board.rows[index].fill_row(player_edge_row)
+    @board.rows[index].fill(player_edge_row)
   end
 
   def move_piece(start_square_notation, end_square_notation)
@@ -61,6 +61,8 @@ class PiecesController
     end_square = @board.get_square_by_notation(end_square_notation)
     end_square_piece = end_square.piece
     piece = start_square.piece
+    raise 'Square is empty' unless piece
+
     piece.move_to(end_square)
     @captured << end_square_piece if end_square_piece
   rescue RuntimeError => e

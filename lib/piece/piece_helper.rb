@@ -6,7 +6,7 @@ module PieceHelper
   BLACK_FONT = "\e[38;2;0;0;0m"
   BOLD = "\e[1m"
 
-  attr_reader :square
+  attr_reader :square, :color
 
   def initialize(color:)
     @color = color
@@ -20,10 +20,6 @@ module PieceHelper
 
   def white?
     @color.eql?(:white)
-  end
-
-  def color
-    @color
   end
 
   def assign_square(square)
@@ -42,11 +38,17 @@ module PieceHelper
     super.to_s
   end
 
+  def on_board?
+    !@square.nil?
+  end
+
   def move_to(end_square)
-    raise 'Illegal Move' unless legal_moves.include? end_square
+    unless legal_moves.include? end_square
+      raise "Illegal Move - Total legal moves: #{legal_moves.length}, Legal moves: #{legal_moves}"
+    end
 
     end_square.put_piece self
-    after_move if respond_to?(:after_move)
+    @moved_before = true unless moved_before?
   end
 
   def to_s
