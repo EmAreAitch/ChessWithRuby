@@ -61,11 +61,20 @@ module Dimension
     return nil unless (square_index = @squares.index(square))
 
     if direction.eql? valid_dirs[0]
-      self[square_index + offset]
-    elsif direction.eql? valid_dirs[1]
       self[square_index - offset]
+    elsif direction.eql? valid_dirs[1]
+      self[square_index + offset]
     else
       [self[square_index + offset], self[square_index - offset]]
     end
+  end
+
+  def get_squares_in_between(start_square, end_square)
+    start_index = @squares.index(start_square)
+    end_index = @squares.index(end_square)
+    return [] if [start_index, end_index].any?(&:nil?)
+
+    min, max = [start_index, end_index].minmax
+    @squares[min + 1..max]
   end
 end

@@ -37,10 +37,17 @@ class Board
     color_index = (square_index / 8).even? ? square_index % 2 : (square_index + 1) % 2
     options = {
       piece: nil,
+      notation: get_notation(square_index),
       color: color[color_index],
       **get_square_position(square_index)
     }
     Square.new(options:)
+  end
+
+  def get_notation(square_index)
+    col = (square_index % 8 + 65).chr
+    row = (8 - square_index / 8).to_s
+    col + row
   end
 
   def get_square_position(square_index)

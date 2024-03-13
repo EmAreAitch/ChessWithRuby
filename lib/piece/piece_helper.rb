@@ -35,7 +35,7 @@ module PieceHelper
   end
 
   def inspect
-    super.to_s
+    "#<#{self.class}:0x#{(object_id << 1).to_s(16)} @color=#{@color}>"
   end
 
   def on_board?
@@ -49,6 +49,12 @@ module PieceHelper
 
     end_square.put_piece self
     @moved_before = true unless moved_before?
+  end
+
+  def adjust_captures(squares)
+    return squares if squares[-1]&.empty? || squares[-1]&.piece_color?(color: opponent_color)
+
+    squares[...-1]
   end
 
   def to_s

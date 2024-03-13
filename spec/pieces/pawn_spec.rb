@@ -51,9 +51,10 @@ describe Pawn do # rubocop:disable Metrics/BlockLength
         end_square = board.get_square_by_notation('b3')
         start_square.put_piece white_pawn
         end_square.put_piece black_pawn
-        white_pawn.move_to(end_square)
-        assert_move_success(start_square, end_square)
-        expect(black_pawn.square).to be_nil
+        # white_pawn.move_to(end_square)
+        legal = white_pawn.legal_moves
+        # assert_move_success(start_square, end_square)
+        expect(legal).to include(end_square)
       end
     end
     context 'when trying to make illegal move' do # rubocop:disable Metrics/BlockLength

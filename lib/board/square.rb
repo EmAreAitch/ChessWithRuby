@@ -3,7 +3,7 @@
 # Represents individual squares in chess board
 # Responsible for tracking piece in that square of the chess board
 class Square
-  attr_reader :row, :column, :diagonal, :color, :piece
+  attr_reader :row, :column, :diagonal, :color, :piece, :notation
 
   VALID_DIAGONAL = %i[left right].freeze
   WHITE_BACKGROUND = "\e[48;2;230;200;160m"
@@ -15,6 +15,7 @@ class Square
     @diagonal = options[:diagonal]
     @piece = options[:piece]
     @color = options[:color]
+    @notation = options[:notation]
   end
 
   def put_piece(piece)
@@ -25,7 +26,7 @@ class Square
   end
 
   def inspect
-    "#<#{self.class}:0x#{(object_id << 1).to_s(16)} @piece=#{@piece.inspect}, @color=#{@color}>"
+    "#<#{self.class}:0x#{(object_id << 1).to_s(16)} @piece=#{@piece.inspect}, @color=#{@color}, @notation=#{@notation}>"
   end
 
   def piece?
@@ -66,6 +67,15 @@ class Square
     return @diagonal[diagonal].get_square_by_offset(self, offset, direction:) if offset
 
     @diagonal[diagonal].get_squares(self, direction:)
+  end
+
+  def get_squares_in_between(square)
+    common_dimension = nil
+    dimensions = [@column, @row] + @diagonal.values
+    dimensions.each do |dimension|
+      common_dimension = dimension if dimension.squares.include? square
+    end
+    common_dimension&.get_squares_in_between(self, square) || []
   end
 
   def to_s

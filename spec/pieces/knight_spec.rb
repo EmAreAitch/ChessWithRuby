@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../../lib/piece/knight'
+require_relative '../../lib/piece/pawn'
 require_relative '../../lib/board/board'
 
 describe Knight do # rubocop:disable Metrics/BlockLength
@@ -15,6 +16,22 @@ describe Knight do # rubocop:disable Metrics/BlockLength
       expect(white_knight.square).to eq(end_square)
     end
     context 'when trying to move legally from e5' do
+      %w[f7 d7 c6 c4 d3 f3 g4 g6].each do |notation|
+        it "moves to #{notation}" do
+          start_square.put_piece white_knight
+          end_square = board.get_square_by_notation(notation)
+          white_knight.move_to end_square
+          assert_move_success(start_square, end_square)
+        end
+      end
+    end
+
+    context 'when trying to hop legally from e5' do
+      before do
+        %w[e6 e4 d5 f5 d6 d4 f6 f4].each do |notation|
+          board.get_square_by_notation(notation).put_piece Pawn.new(color: :white)
+        end
+      end
       %w[f7 d7 c6 c4 d3 f3 g4 g6].each do |notation|
         it "moves to #{notation}" do
           start_square.put_piece white_knight
