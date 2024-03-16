@@ -6,6 +6,7 @@ class Square
   attr_reader :row, :column, :diagonal, :color, :piece, :notation
 
   VALID_DIAGONAL = %i[left right].freeze
+  VALID_DIMENSION = %i[column row left_diagonal right_diagonal].freeze
   WHITE_BACKGROUND = "\e[48;2;230;200;160m"
   BLACK_BACKGROUND = "\e[48;2;181;136;99m"
   RESET_BACKGROUND = "\e[0m"
@@ -60,6 +61,20 @@ class Square
     return @row.get_square_by_offset(self, offset, direction:) if offset
 
     @row.get_squares(self, direction:)
+  end
+
+  def get_nearest_occupied_square(dimension:, direction:)
+    raise ArgumentError, ":#{dimension} Invalid dimension" unless VALID_DIMENSION.include? dimension
+
+    case dimension
+    when :column
+      @column.get_nearest_occupied_square(self, direction:)
+    when :row
+      @row.get_nearest_occupied_square(self, direction:)
+    else
+      diagonal = dimension.to_s.split('_').first.to_sym
+      @diagonal[diagonal].get_nearest_occupied_square(self, direction:)
+    end
   end
 
   def get_squares_in_diagonal(diagonal:, direction:, offset: nil)

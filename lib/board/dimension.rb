@@ -77,4 +77,27 @@ module Dimension
     min, max = [start_index, end_index].minmax
     @squares[min + 1..max]
   end
+
+  def get_nearest_occupied_square(square, direction:)
+    valid_dirs = valid_directions
+    raise ArgumentError, ":#{direction} Invalid Direction" unless valid_dirs.include? direction
+
+    return nil unless (square_index = @squares.index(square))
+
+    if direction.eql? valid_dirs[0]
+      find_occupied_square(square_index)
+    elsif direction.eql? valid_dirs[1]
+      find_occupied_square(square_index, reverse: true)
+    else
+      [find_occupied_square(square_index), find_occupied_square(square_index, reverse: true)]
+    end
+  end
+
+  private
+
+  def find_occupied_square(square_index, reverse: false)
+    return @squares[square_index + 1..].find(&:piece?) unless reverse == true
+
+    @squares[...square_index].reverse.find(&:piece?)
+  end
 end
