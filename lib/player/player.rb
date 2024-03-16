@@ -27,7 +27,7 @@ class Player
     @pieces_list.filter(&:on_board?)
   end
 
-  def player_legal_moves
+  def legal_moves
     pieces_on_board.reduce(Set.new) do |set, piece|
       set | piece.legal_moves
     end
@@ -59,5 +59,9 @@ class Player
 
   def back_row
     [rooks[0], knights[0], bishops[0], queen, king, bishops[1], knights[1], rooks[1]]
+  end
+
+  def to_s
+    @color.to_s.capitalize
   end
 end
