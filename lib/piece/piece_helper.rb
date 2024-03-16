@@ -12,6 +12,11 @@ module PieceHelper
     @color = color
     @square = nil
     @moved_before = false
+    @moves_count = 0
+  end
+
+  def belongs_to?(player)
+    player.color == @color
   end
 
   def moved_before?
@@ -43,12 +48,13 @@ module PieceHelper
   end
 
   def move_to(end_square)
-    unless legal_moves.include? end_square
+    unless legal_moves.include?(end_square)
       raise "Illegal Move - Total legal moves: #{legal_moves.length}, Legal moves: #{legal_moves}"
     end
 
     end_square.put_piece self
     @moved_before = true unless moved_before?
+    @moves_count += 1
   end
 
   def adjust_captures(squares)
@@ -60,5 +66,13 @@ module PieceHelper
   def to_s
     symbol_color = white? ? WHITE_FONT : BLACK_FONT
     "#{BOLD}#{symbol_color}#{symbol} "
+  end
+
+  def special_moves
+    Set.new
+  end
+
+  def legal_moves
+    raise NotImplementedError, "#{self.class} has not implemented abstract method '#{__method__}'"
   end
 end
